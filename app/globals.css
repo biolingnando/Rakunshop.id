@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -21,18 +19,24 @@
   }
 
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 
   a {
-    @apply text-primary hover:underline;
+    color: var(--color-primary);
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 
   button {
-    @apply transition-colors duration-200;
+    transition-property: background-color, border-color, color;
+    transition-duration: 200ms;
   }
 }
