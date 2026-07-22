@@ -26,6 +26,7 @@
         .glass-card { background: rgba(31, 41, 55, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .glass-card:hover { transform: translateY(-4px); border-color: rgba(99, 102, 241, 0.5); box-shadow: 0 12px 24px -10px rgba(99, 102, 241, 0.3); }
         
+        /* Realistic 3D Tactile Buttons */
         .btn-3d {
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             box-shadow: 0 4px 0 #3730a3, 0 6px 12px rgba(99, 102, 241, 0.4);
@@ -42,6 +43,7 @@
         .btn-green-3d:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 5px 0 #047857, 0 8px 16px rgba(16, 185, 129, 0.5); }
         .btn-green-3d:active { transform: translateY(3px); box-shadow: 0 1px 0 #047857, 0 2px 4px rgba(16, 185, 129, 0.3); }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
@@ -70,6 +72,7 @@
                 <div class="flex items-center gap-3">
                     <button onclick="switchView('home')" class="text-slate-300 hover:text-indigo-400 font-medium text-sm transition px-3 py-2 rounded-lg hover:bg-slate-800/50">Beranda</button>
                     <a href="https://wa.me/6289646775883" target="_blank" class="text-slate-300 hover:text-green-400 font-medium text-sm transition flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-slate-800/50"><i class="fab fa-whatsapp"></i> Bantuan</a>
+                    <!-- NOTE: Admin panel button is strictly hidden from regular members. Use secret URL #adminlogin or #adminpanel -->
                 </div>
             </div>
         </div>
@@ -77,9 +80,9 @@
 
     <div id="toast-container" class="fixed top-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
+    <!-- MAIN APP WRAPPER -->
     <main id="app-content" class="flex-grow pb-16">
 
-        <!-- VIEW: HOME / STOREFRONT -->
         <div id="view-home" class="view-section">
             
             <!-- Compact Ad Banner Carousel Section (~140px-190px height, auto-rotate 3s, max 8 banners, auto crop) -->
@@ -109,7 +112,7 @@
             <div id="catalog-section" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div class="text-center mb-10">
                     <h2 id="catalog-title" class="text-3xl sm:text-4xl font-black text-white tracking-tight">Kategori Layanan & Produk</h2>
-                    <p id="catalog-subtitle" class="text-slate-400 mt-2 max-w-xl mx-auto">Pilih kategori layanan game atau produk digital rumahan yang Anda butuhkan dengan proses instan.</p>
+                    <p id="catalog-subtitle" class="text-slate-400 mt-2 max-w-xl mx-auto">Pilih kategori layanan game realistis atau produk digital rumahan yang Anda butuhkan dengan proses instan 24 jam.</p>
                 </div>
                 
                 <!-- Dynamic Catalog Container -->
@@ -125,7 +128,7 @@
                             <div class="w-8 h-8 bg-gradient-to-tr from-indigo-600 to-purple-600 text-white rounded-lg flex items-center justify-center font-bold mr-2 shadow-md">🦝</div>
                             <span class="font-extrabold text-lg text-white">RAKUNSHOP ID</span>
                         </div>
-                        <p class="text-slate-400 mb-4 leading-relaxed text-xs sm:text-sm">Pusat Top Up Game Resmi & Produk Digital Terpercaya 24 Jam.</p>
+                        <p class="text-slate-400 mb-4 leading-relaxed text-xs sm:text-sm">Pusat Top Up Game Resmi & Produk Digital Terpercaya. Mobile Legends, Free Fire, PUBG, Domino Ungu, Pulsa, dan Token Listrik 24 Jam Nonstop.</p>
                         <div class="flex gap-3">
                             <a href="https://www.instagram.com/rakunshop_id" target="_blank" class="w-9 h-9 glass-card hover:bg-indigo-600 hover:text-white rounded-xl flex items-center justify-center transition text-slate-300"><i class="fab fa-instagram"></i></a>
                             <a href="https://tiktok.com/@rwin_r.nando" target="_blank" class="w-9 h-9 glass-card hover:bg-indigo-600 hover:text-white rounded-xl flex items-center justify-center transition text-slate-300"><i class="fab fa-tiktok"></i></a>
@@ -155,14 +158,13 @@
             </footer>
         </div>
 
-        <!-- VIEW: PRODUCT DETAIL / CHECKOUT -->
         <div id="view-product-detail" class="view-section hidden pt-8">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" id="product-detail-container">
                 <!-- Injected via JS -->
             </div>
         </div>
 
-        <!-- VIEW: SECRET ADMIN LOGIN (#adminlogin or #adminpanel) -->
+        <!-- Secret Admin Login View (Protected via URL hash #adminlogin or #adminpanel) -->
         <div id="view-admin-login" class="view-section hidden flex items-center justify-center min-h-[75vh]">
             <div class="glass-panel p-8 rounded-3xl shadow-2xl border border-slate-700/80 w-full max-w-md text-center relative overflow-hidden">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none"></div>
@@ -187,7 +189,6 @@
             </div>
         </div>
 
-        <!-- VIEW: ADMIN DASHBOARD -->
         <div id="view-admin-dashboard" class="view-section hidden">
             <div class="flex flex-col md:flex-row min-h-[85vh]">
                 
@@ -288,7 +289,7 @@
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                             <div>
                                 <h2 class="text-2xl font-bold text-white">Database Kategori, Produk & QR Otomatis</h2>
-                                <p class="text-slate-400 text-sm mt-1">Tambah kategori baru (Game, Pulsa, Token, Voucher), sub-produk, nominal harga, dan QR Code unik.</p>
+                                <p class="text-slate-400 text-sm mt-1">Tambah kategori baru, atur sub-produk game/pulsa, nominal harga, dan QR Code unik per produk.</p>
                             </div>
                             <button onclick="openModalAddCategory()" class="btn-3d px-4 py-2.5 rounded-xl font-bold text-sm text-white flex items-center gap-2">
                                 <i class="fas fa-folder-plus"></i> Tambah Kategori Baru
@@ -303,7 +304,7 @@
                     <div id="tab-cms" class="admin-tab-content hidden">
                         <div class="mb-8">
                             <h2 class="text-2xl font-bold text-white">Kelola Banner Iklan & Teks Berjalan</h2>
-                            <p class="text-slate-400 text-sm mt-1">Ubah banner realistis (Maks. 8 Banner, berganti otomatis setiap 3 detik) & teks pengumuman beranda.</p>
+                            <p class="text-slate-400 text-sm mt-1">Ubah banner realistis (Maks. 8 Banner, berganti otomatis setiap 3 detik, otomatis crop) & teks pengumuman beranda.</p>
                         </div>
 
                         <!-- Running Text Form -->
@@ -441,15 +442,15 @@
             <h3 class="text-xl font-bold text-white mb-4">Tambah Kategori Utama</h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Kategori (Contoh: Top Up Game, Pulsa, Token Listrik, Voucher Game)</label>
-                    <input type="text" id="new-cat-title" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Top Up Game">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Kategori (Contoh: Voucher Game, Top Up)</label>
+                    <input type="text" id="new-cat-title" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Voucher Game">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Deskripsi Singkat</label>
-                    <input type="text" id="new-cat-desc" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Pilihan game populer resmi 24 jam">
+                    <input type="text" id="new-cat-desc" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Google Play, Garena, Steam, dll">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Ikon FontAwesome (Contoh: fa-gamepad, fa-bolt, fa-gift, fa-signal)</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Ikon FontAwesome (Contoh: fa-gamepad, fa-bolt, fa-gift)</label>
                     <input type="text" id="new-cat-icon" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="fa-gamepad">
                 </div>
                 <div class="flex gap-3 pt-3">
@@ -463,12 +464,12 @@
     <!-- Modal Add Sub-Product / Game -->
     <div id="modal-add-product" class="fixed inset-0 bg-black/80 z-[70] hidden flex items-center justify-center p-4 backdrop-blur-md">
         <div class="glass-panel rounded-3xl w-full max-w-md shadow-2xl p-6 border border-slate-700">
-            <h3 class="text-xl font-bold text-white mb-4">Tambah Sub-Produk</h3>
+            <h3 class="text-xl font-bold text-white mb-4">Tambah Sub-Produk / Game</h3>
             <input type="hidden" id="target-cat-id">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Sub-Produk (Contoh: Mobile Legends, Free Fire, Token PLN)</label>
-                    <input type="text" id="new-prod-name" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Mobile Legends">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Game / Sub-Produk</label>
+                    <input type="text" id="new-prod-name" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Contoh: Mobile Legends">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Deskripsi Layanan</label>
@@ -477,7 +478,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Membutuhkan Server / Zone ID?</label>
                     <select id="new-prod-zone" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white">
-                        <option value="false">Tidak (Hanya ID / Nomor Tujuan)</option>
+                        <option value="false">Tidak (Hanya ID Game)</option>
                         <option value="true">Ya (Butuh ID & Server ID)</option>
                     </select>
                 </div>
@@ -502,7 +503,7 @@
             <input type="hidden" id="nominal-edit-index" value="-1">
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Item / Nominal (Contoh: 86 Diamonds / Pulsa 10k)</label>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Nama Item / Nominal (Contoh: 86 Diamonds)</label>
                     <input type="text" id="nom-item-name" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="86 Diamonds">
                 </div>
                 <div>
@@ -529,7 +530,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Judul / Promo Banner</label>
-                    <input type="text" id="new-banner-title" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Promo Spesial Mobile Legends">
+                    <input type="text" id="new-banner-title" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-white" placeholder="Promo Spesial Mobile Legends M-Series">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">URL Gambar Banner (Otomatis Crop Sesuai Ukuran)</label>
@@ -550,16 +551,21 @@
             banners: [
                 { 
                     id: 1, 
-                    title: 'RAKUNSHOP ID - Pusat Top Up Resmi & Produk Digital Terpercaya 🦝🔥', 
+                    title: 'Mobile Legends Official Top Up Partner 🦝🔥', 
                     image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop' 
                 },
                 { 
                     id: 2, 
-                    title: 'Proses Otomatis 24 Jam Nonstop Tanpa Ribet', 
+                    title: 'Free Fire & PUBG Mobile Realistic Battle Arena', 
                     image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop' 
+                },
+                { 
+                    id: 3, 
+                    title: 'Voucher Google Play & Domino Ungu Instan 24 Jam', 
+                    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop' 
                 }
             ],
-            runningText: '🚀 Selamat datang di RAKUNSHOP ID! Pusat Top Up Game Tercepat, Termurah & Terpercaya 24 Jam. Silakan buat kategori & produk melalui Admin Database. Hubungi Admin WA: 0896-4677-5883',
+            runningText: '🚀 Selamat datang di RAKUNSHOP ID! Pusat Top Up Game Tercepat, Termurah & Terpercaya 24 Jam. Mobile Legends, Free Fire, Domino Ungu, Pulsa & Token Listrik. Hubungi Admin WA: 0896-4677-5883',
             payments: [
                 { id: 'dana', name: 'DANA', account: '0896-4677-5883 a/n RAKUNSHOP', icon: 'fa-wallet', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
                 { id: 'gopay', name: 'GoPay', account: '0896-4677-5883 a/n RAKUNSHOP', icon: 'fa-wallet', color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
@@ -567,7 +573,83 @@
                 { id: 'bank', name: 'Transfer Bank (BCA)', account: 'BCA 1234567890 a/n RAKUNSHOP ID', icon: 'fa-university', color: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/30' },
                 { id: 'qris', name: 'QRIS All Payment (Otomatis per Produk)', account: 'Scan Barcode Sesuai Nominal Harga', icon: 'fa-qrcode', color: 'text-pink-400 bg-pink-500/10 border-pink-500/30' }
             ],
-            categories: {} // Initially completely empty as requested by user
+            categories: {
+                games: {
+                    title: "Top Up Game & Voucher",
+                    desc: "Pilih game atau voucher favorit Anda untuk top up diamond atau koin instan.",
+                    icon: "fa-gamepad",
+                    items: [
+                        {
+                            id: 'mlbb', name: 'Mobile Legends', desc: 'Top Up Diamonds Cepat & Murah (Resmi Moonton).', icon: 'fa-mobile-alt', 
+                            banner: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: true,
+                            nominals: [
+                                { id: 'ml_86', name: '86 Diamonds', price: 23000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_ML_86_IDR23000' },
+                                { id: 'ml_172', name: '172 Diamonds', price: 46000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_ML_172_IDR46000' },
+                                { id: 'ml_257', name: '257 Diamonds', price: 68000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_ML_257_IDR68000' },
+                                { id: 'ml_408', name: '408 Diamonds', price: 105000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_ML_408_IDR105000' },
+                                { id: 'ml_706', name: '706 Diamonds', price: 180000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_ML_706_IDR180000' }
+                            ]
+                        },
+                        {
+                            id: 'ff', name: 'Free Fire', desc: 'Top Up Diamond Free Fire Resmi Garena.', icon: 'fa-crosshairs', 
+                            banner: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: false,
+                            nominals: [
+                                { id: 'ff_70', name: '70 Diamonds', price: 10000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_FF_70_IDR10000' },
+                                { id: 'ff_140', name: '140 Diamonds', price: 20000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_FF_140_IDR20000' },
+                                { id: 'ff_355', name: '355 Diamonds', price: 50000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_FF_355_IDR50000' },
+                                { id: 'ff_720', name: '720 Diamonds', price: 100000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_FF_720_IDR100000' }
+                            ]
+                        },
+                        {
+                            id: 'pubg', name: 'PUBG Mobile', desc: 'Top Up UC Resmi & Aman 24 Jam.', icon: 'fa-fighter-jet',
+                            banner: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: false,
+                            nominals: [
+                                { id: 'pubg_60', name: '60 UC', price: 15000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PUBG_60_IDR15000' },
+                                { id: 'pubg_325', name: '325 UC', price: 75000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PUBG_325_IDR75000' }
+                            ]
+                        },
+                        {
+                            id: 'domino', name: 'Domino Ungu', desc: 'Koin Emas Domino Ungu Resmi.', icon: 'fa-dice', 
+                            banner: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: false,
+                            nominals: [
+                                { id: 'dom_1b', name: 'Koin Ungu 1B', price: 65000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_DOMINO_1B_IDR65000' },
+                                { id: 'dom_5b', name: 'Koin Ungu 5B', price: 310000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_DOMINO_5B_IDR310000' }
+                            ]
+                        }
+                    ]
+                },
+                digital: {
+                    title: "Produk Rumahan & Pulsa",
+                    desc: "Kebutuhan pulsa elektrik, paket data internet, dan token listrik PLN.",
+                    icon: "fa-bolt",
+                    items: [
+                        {
+                            id: 'pulsa_tsel', name: 'Pulsa Elektrik & Masa Aktif', desc: 'Pulsa Reguler & Penambah Masa Aktif Kartu Semua Operator.', icon: 'fa-signal', 
+                            banner: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: false,
+                            nominals: [
+                                { id: 'pls_10', name: 'Pulsa 10.000', price: 11500, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PULSA_10K_IDR11500' },
+                                { id: 'pls_25', name: 'Pulsa 25.000', price: 26500, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PULSA_25K_IDR26500' },
+                                { id: 'pls_50', name: 'Pulsa 50.000', price: 51000, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PULSA_50K_IDR51000' }
+                            ]
+                        },
+                        {
+                            id: 'token_pln', name: 'Token Listrik / Prabayar', desc: 'Token Listrik PLN 20rb s.d 500rb instan.', icon: 'fa-lightbulb', 
+                            banner: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000&auto=format&fit=crop',
+                            requiresZone: false,
+                            nominals: [
+                                { id: 'pln_20', name: 'Token PLN 20.000', price: 21500, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PLN_20K_IDR21500' },
+                                { id: 'pln_50', name: 'Token PLN 50.000', price: 51500, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PLN_50K_IDR51500' },
+                                { id: 'pln_100', name: 'Token PLN 100.000', price: 101500, qr: 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_PLN_100K_IDR101500' }
+                            ]
+                        }
+                    ]
+                }
+            }
         };
 
         let checkoutState = {
@@ -644,7 +726,7 @@
                         <img src="${banner.image}" class="w-full h-full object-cover filter brightness-95" alt="${banner.title}">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex items-end p-3 sm:p-4">
                             <div>
-                                <span class="bg-indigo-600/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold mb-1 inline-block shadow">🔥 RAKUNSHOP ID</span>
+                                <span class="bg-indigo-600/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold mb-1 inline-block shadow">🔥 Promo RAKUNSHOP ID</span>
                                 <h3 class="text-white text-xs sm:text-sm font-black drop-shadow line-clamp-1">${banner.title}</h3>
                             </div>
                         </div>
@@ -685,25 +767,8 @@
             const container = document.getElementById('dynamic-catalog-container');
             if(!container) return;
             document.getElementById('catalog-title').textContent = "Kategori Layanan & Produk";
-            document.getElementById('catalog-subtitle').textContent = "Pilih kategori layanan game atau produk digital rumahan yang Anda butuhkan.";
+            document.getElementById('catalog-subtitle').textContent = "Pilih kategori layanan game realistis atau produk digital rumahan yang Anda butuhkan.";
             
-            const categoryKeys = Object.keys(database.categories);
-            if(categoryKeys.length === 0) {
-                container.innerHTML = `
-                    <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto border border-slate-700/80">
-                        <div class="w-16 h-16 bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-inner">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Toko Masih Kosong</h3>
-                        <p class="text-slate-400 text-sm mb-6 leading-relaxed">Belum ada kategori atau produk yang ditambahkan oleh Admin. Silakan akses Admin Panel untuk mulai membuat kategori dan produk.</p>
-                        <a href="#adminlogin" onclick="switchView('admin-login')" class="btn-3d px-6 py-3 rounded-xl text-white font-bold text-sm inline-flex items-center gap-2">
-                            <i class="fas fa-user-shield"></i> Masuk Admin Panel
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
             let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">';
             
             for(let key in database.categories) {
@@ -743,7 +808,7 @@
             `;
 
             if(!category.items || category.items.length === 0) {
-                html += `<div class="col-span-3 text-center py-12 text-slate-500">Belum ada sub-produk dalam kategori ini. Silakan tambahkan lewat Admin Panel.</div>`;
+                html += `<div class="col-span-3 text-center py-12 text-slate-500">Belum ada produk dalam kategori ini. Silakan tambahkan lewat Admin Panel.</div>`;
             } else {
                 category.items.forEach(item => {
                     html += `
@@ -1219,17 +1284,6 @@
             if(!container) return;
             container.innerHTML = '';
 
-            const categoryKeys = Object.keys(database.categories);
-            if(categoryKeys.length === 0) {
-                container.innerHTML = `
-                    <div class="glass-panel p-8 rounded-3xl text-center text-slate-400">
-                        <p class="mb-3 text-sm">Belum ada kategori utama yang dibuat di database.</p>
-                        <button onclick="openModalAddCategory()" class="btn-3d px-4 py-2 text-xs font-bold text-white rounded-xl">Buat Kategori Pertama</button>
-                    </div>
-                `;
-                return;
-            }
-
             for(let key in database.categories) {
                 const cat = database.categories[key];
                 let itemsHtml = '';
@@ -1321,9 +1375,11 @@
             showToast("Kategori baru berhasil ditambahkan!", "success");
         }
         function deleteCategory(key) {
-            delete database.categories[key];
-            updateAdminDashboard();
-            showToast("Kategori berhasil dihapus.", "success");
+            if(confirm("Apakah Anda yakin ingin menghapus kategori ini beserta seluruh produk di dalamnya?")) {
+                delete database.categories[key];
+                updateAdminDashboard();
+                showToast("Kategori berhasil dihapus.", "success");
+            }
         }
 
         // Sub-Product CRUD
@@ -1339,7 +1395,7 @@
             const requiresZone = document.getElementById('new-prod-zone').value === 'true';
             const banner = document.getElementById('new-prod-banner').value.trim() || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000';
 
-            if(!name) return showToast("Nama sub-produk wajib diisi!", "error");
+            if(!name) return showToast("Nama sub-produk/game wajib diisi!", "error");
 
             const newId = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
             if(!database.categories[catKey].items) database.categories[catKey].items = [];
@@ -1351,16 +1407,20 @@
                 icon: 'fa-gamepad',
                 banner: banner,
                 requiresZone: requiresZone,
-                nominals: []
+                nominals: [
+                    { id: newId + '_basic', name: 'Paket Basic', price: 15000, qr: `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=RAKUNSHOP_${newId}_15000` }
+                ]
             });
             closeModalAddProduct();
             updateAdminDashboard();
             showToast(`Sub-produk ${name} berhasil ditambahkan!`, "success");
         }
         function deleteSubProduct(catKey, prodId) {
-            database.categories[catKey].items = database.categories[catKey].items.filter(i => i.id !== prodId);
-            updateAdminDashboard();
-            showToast("Sub-produk berhasil dihapus.", "success");
+            if(confirm("Hapus sub-produk ini?")) {
+                database.categories[catKey].items = database.categories[catKey].items.filter(i => i.id !== prodId);
+                updateAdminDashboard();
+                showToast("Sub-produk berhasil dihapus.", "success");
+            }
         }
 
         // Nominal & QR CRUD
@@ -1423,10 +1483,12 @@
         }
 
         function deleteNominal(catKey, prodId, nomIdx) {
-            const product = database.categories[catKey].items.find(i => i.id === prodId);
-            product.nominals.splice(nomIdx, 1);
-            updateAdminDashboard();
-            showToast("Nominal berhasil dihapus.", "success");
+            if(confirm("Hapus nominal harga ini?")) {
+                const product = database.categories[catKey].items.find(i => i.id === prodId);
+                product.nominals.splice(nomIdx, 1);
+                updateAdminDashboard();
+                showToast("Nominal berhasil dihapus.", "success");
+            }
         }
 
         // CMS Actions
@@ -1471,7 +1533,7 @@
             closeModalAddBanner();
             renderAdminBannersList();
             renderBanners();
-            showToast("Banner iklan berhasil ditambahkan!", "success");
+            showToast("Banner iklan berhasil ditambahkan (Otomatis berganti tiap 3 detik)!", "success");
         }
         function deleteBanner(idx) {
             database.banners.splice(idx, 1);
