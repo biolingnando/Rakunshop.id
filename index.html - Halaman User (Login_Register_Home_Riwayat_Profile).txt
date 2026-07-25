@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>RAKUN SHOP ID - Top Up & Produk Digital</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-gray-50 text-gray-800 transition-colors duration-300">
+
+<!-- ============ TOP NAVIGATION ============ -->
+<header id="topNav" class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 shadow-md transition-colors">
+  <div class="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg">R</div>
+      <div>
+        <h1 class="font-extrabold text-red-600 dark:text-white text-base leading-tight">RAKUN SHOP</h1>
+        <p class="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">ID • Produk Digital Terpercaya</p>
+      </div>
+    </div>
+    <button id="themeToggle" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center hover:scale-110 transition">
+      <i id="themeIcon" class="fa-solid fa-moon text-gray-700 dark:text-yellow-300"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ============ MAIN CONTENT ============ -->
+<main class="max-w-lg mx-auto pt-16 pb-24 px-4 min-h-screen">
+
+  <!-- ====== PAGE: LOGIN ====== -->
+  <section id="page-login" class="page active">
+    <div class="py-8 text-center">
+      <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-3xl mb-3 shadow-lg">
+        <i class="fa-solid fa-raccoon"></i>
+      </div>
+      <h2 class="text-2xl font-extrabold text-red-600 dark:text-white">Selamat Datang</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Login ke RAKUN SHOP ID</p>
+    </div>
+    <form id="loginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-200">Nomor HP</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-phone"></i></span>
+          <input type="tel" id="loginHp" required placeholder="08xxxxxxxxxx" class="w-full pl-10 pr-3 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-200">Password</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" id="loginPwd" required placeholder="Password" class="w-full pl-10 pr-11 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-emerald-500 outline-none" />
+          <button type="button" onclick="togglePwd('loginPwd', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-emerald-500">
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-lg hover:shadow-xl active:scale-95 transition">
+        <i class="fa-solid fa-right-to-bracket mr-2"></i>LOGIN
+      </button>
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Belum punya akun? <a href="#" onclick="showPage('register')" class="text-emerald-600 dark:text-emerald-400 font-bold hover:underline">Daftar Sekarang</a>
+      </p>
+      <div class="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3">
+        <button type="button" onclick="showPage('adminLogin')" class="w-full text-xs text-gray-500 dark:text-gray-400 hover:text-red-500">
+          <i class="fa-solid fa-user-shield mr-1"></i>Login Admin
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ====== PAGE: ADMIN LOGIN ====== -->
+  <section id="page-adminLogin" class="page hidden">
+    <div class="py-8 text-center">
+      <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white text-3xl mb-3 shadow-lg">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <h2 class="text-2xl font-extrabold text-red-600 dark:text-white">Admin Panel</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Login Administrator</p>
+    </div>
+    <form id="adminLoginForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-200">Username</label>
+        <input type="text" id="adminUser" required value="Admin" class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-red-500 outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-200">Password</label>
+        <div class="relative">
+          <input type="password" id="adminPwd" required value="admin123" class="w-full px-4 pr-11 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-red-500 outline-none" />
+          <button type="button" onclick="togglePwd('adminPwd', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+            <i class="fa-solid fa-eye-slash"></i>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 text-white font-bold shadow-lg active:scale-95 transition">
+        <i class="fa-solid fa-unlock mr-2"></i>LOGIN ADMIN
+      </button>
+      <p class="text-center text-sm">
+        <a href="#" onclick="showPage('login')" class="text-emerald-600 dark:text-emerald-400 font-semibold">← Kembali ke Login User</a>
+      </p>
+    </form>
+  </section>
+
+  <!-- ====== PAGE: REGISTER ====== -->
+  <section id="page-register" class="page hidden">
+    <div class="py-6 text-center">
+      <h2 class="text-2xl font-extrabold text-red-600 dark:text-white">Daftar Akun</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Bergabung bersama RAKUN SHOP ID</p>
+    </div>
+    <form id="regForm" class="space-y-3">
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Nama Lengkap</label>
+        <input type="text" id="regNama" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+      </div>
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Nomor HP</label>
+        <input type="tel" id="regHp" required placeholder="08xxxxxxxxxx" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+      </div>
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Email</label>
+        <input type="email" id="regEmail" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+      </div>
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Password</label>
+        <div class="relative">
+          <input type="password" id="regPwd" required class="w-full px-4 pr-11 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+          <button type="button" onclick="togglePwd('regPwd', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><i class="fa-solid fa-eye-slash"></i></button>
+        </div>
+      </div>
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Ulangi Password</label>
+        <div class="relative">
+          <input type="password" id="regPwd2" required class="w-full px-4 pr-11 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+          <button type="button" onclick="togglePwd('regPwd2', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><i class="fa-solid fa-eye-slash"></i></button>
+        </div>
+      </div>
+      <div><label class="block text-xs font-semibold mb-1 text-gray-700 dark:text-gray-200">Kode Referal <span class="text-gray-400 font-normal">(Opsional)</span></label>
+        <input type="text" id="regRef" placeholder="Masukkan kode ajak teman" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow-lg active:scale-95 transition">
+        <i class="fa-solid fa-user-plus mr-2"></i>DAFTAR SEKARANG
+      </button>
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Sudah punya akun? <a href="#" onclick="showPage('login')" class="text-emerald-600 dark:text-emerald-400 font-bold">Login</a>
+      </p>
+    </form>
+  </section>
+
+  <!-- ====== PAGE: HOME (setelah login) ====== -->
+  <section id="page-home" class="page hidden">
+    <!-- Saldo & Poin -->
+    <div class="mt-2 rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-700 p-4 text-white shadow-xl">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs bg-white/20 px-2 py-1 rounded-full font-semibold" id="vipBadge">BIASA</span>
+        <span class="text-xs opacity-80" id="masaVip"></span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <p class="text-[11px] opacity-80">Saldo Saya</p>
+          <p class="text-xl font-extrabold" id="saldoText">Rp 0</p>
+          <div class="flex gap-2 mt-2">
+            <button onclick="showModal('modalTopup')" class="text-[11px] bg-white text-emerald-700 font-bold px-2.5 py-1 rounded-md">+ Isi Saldo</button>
+            <button onclick="showModal('modalTarik')" class="text-[11px] bg-white/20 border border-white/40 font-bold px-2.5 py-1 rounded-md">Tarik</button>
+          </div>
+        </div>
+        <div>
+          <p class="text-[11px] opacity-80">Poin <span class="opacity-70">(1pt = Rp1)</span></p>
+          <p class="text-xl font-extrabold" id="poinText">0 Pts</p>
+          <button onclick="tukarPoin()" class="text-[11px] mt-2 bg-yellow-400 text-emerald-900 font-bold px-2.5 py-1 rounded-md w-full">Tukar Poin → Saldo</button>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-white/20 flex items-center justify-between">
+        <div>
+          <p class="text-[10px] opacity-80">Kode Referal Saya</p>
+          <p class="font-bold tracking-wider" id="myRefCode">-</p>
+        </div>
+        <button onclick="copyRef()" class="text-[11px] bg-white text-emerald-700 font-bold px-3 py-1.5 rounded-lg">
+          <i class="fa-solid fa-copy mr-1"></i>Salin
+        </button>
+      </div>
+    </div>
+
+    <!-- Banner Slider -->
+    <div class="mt-4 relative rounded-2xl overflow-hidden h-36 shadow-lg" id="bannerWrap">
+      <img id="bannerImg" class="w-full h-full object-cover transition-opacity duration-500" src="" alt="banner" />
+      <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1" id="bannerDots"></div>
+    </div>
+
+    <!-- Kategori Cepat -->
+    <h3 class="mt-5 mb-2 font-bold text-red-600 dark:text-white text-sm"><i class="fa-solid fa-bolt mr-1 text-yellow-500"></i>Kategori Produk</h3>
+    <div class="grid grid-cols-4 gap-2 text-center" id="kategoriList"></div>
+
+    <!-- Daftar Produk -->
+    <h3 class="mt-6 mb-2 font-bold text-red-600 dark:text-white text-sm flex items-center justify-between">
+      <span><i class="fa-solid fa-fire mr-1 text-orange-500"></i>Produk Populer</span>
+      <select id="filterKategori" onchange="renderProduk()" class="text-[11px] px-2 py-1 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-white">
+        <option value="">Semua</option>
+      </select>
+    </h3>
+    <div id="produkList" class="space-y-2"></div>
+  </section>
+
+  <!-- ====== PAGE: RIWAYAT ====== -->
+  <section id="page-riwayat" class="page hidden">
+    <h2 class="text-lg font-extrabold text-red-600 dark:text-white mb-3">Riwayat</h2>
+    <div class="flex gap-1 mb-3 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl">
+      <button class="tabRiwayat flex-1 py-2 text-xs font-bold rounded-lg bg-emerald-500 text-white" data-tab="trx">Transaksi</button>
+      <button class="tabRiwayat flex-1 py-2 text-xs font-bold rounded-lg text-gray-600 dark:text-gray-300" data-tab="saldo">Saldo</button>
+      <button class="tabRiwayat flex-1 py-2 text-xs font-bold rounded-lg text-gray-600 dark:text-gray-300" data-tab="ref">Referal</button>
+    </div>
+    <div id="riwayatContent" class="space-y-2"></div>
+  </section>
+
+  <!-- ====== PAGE: PROFILE ====== -->
+  <section id="page-profile" class="page hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow text-center">
+      <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white text-4xl font-bold mb-3" id="profAvatar">R</div>
+      <h3 class="font-extrabold text-lg text-red-600 dark:text-white" id="profNama">-</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400" id="profHp">-</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400" id="profEmail">-</p>
+      <span class="inline-block mt-2 text-[10px] px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 font-bold" id="profVip">BIASA</span>
+    </div>
+
+    <div class="mt-4 bg-white dark:bg-gray-800 rounded-2xl shadow divide-y divide-gray-100 dark:divide-gray-700">
+      <button onclick="showModal('modalUbahPwd')" class="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-t-2xl">
+        <span class="text-sm dark:text-white"><i class="fa-solid fa-key mr-2 text-emerald-500"></i>Ubah Kata Sandi</span>
+        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+      </button>
+      <button onclick="showModal('modalUpgradeVip')" class="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700">
+        <span class="text-sm dark:text-white"><i class="fa-solid fa-crown mr-2 text-yellow-500"></i>Upgrade VIP</span>
+        <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
+      </button>
+      <button onclick="logout()" class="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 rounded-b-2xl text-red-500">
+        <span class="text-sm font-semibold"><i class="fa-solid fa-right-from-bracket mr-2"></i>Keluar Akun</span>
+      </button>
+    </div>
+
+    <p class="text-center text-[10px] text-gray-400 mt-6">RAKUN SHOP ID © v1.0</p>
+  </section>
+
+</main>
+
+<!-- ============ BOTTOM NAVIGATION ============ -->
+<nav id="bottomNav" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 shadow-[0_-2px_10px_rgba(0,0,0,0.05)]">
+  <div class="max-w-lg mx-auto grid grid-cols-3">
+    <button class="navBtn active py-2.5 flex flex-col items-center text-[10px]" data-page="home">
+      <i class="fa-solid fa-house text-lg mb-0.5"></i><span class="font-semibold">Home</span>
+    </button>
+    <button class="navBtn py-2.5 flex flex-col items-center text-[10px] text-gray-500 dark:text-gray-400" data-page="riwayat">
+      <i class="fa-solid fa-clock-rotate-left text-lg mb-0.5"></i><span class="font-semibold">Riwayat</span>
+    </button>
+    <button class="navBtn py-2.5 flex flex-col items-center text-[10px] text-gray-500 dark:text-gray-400" data-page="profile">
+      <i class="fa-solid fa-user text-lg mb-0.5"></i><span class="font-semibold">Profile</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ MODAL: BELI PRODUK ============ -->
+<div id="modalBeli" class="modal hidden fixed inset-0 z-[60] bg-black/50 flex items-end sm:items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5 animate-slideUp">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="font-extrabold text-red-600 dark:text-white" id="beliNama">Nama Produk</h3>
+      <button onclick="hideModal('modalBeli')" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Kategori: <span id="beliKat" class="font-semibold"></span></p>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Harga Normal: <span id="beliHargaNormal" class="font-semibold line-through"></span> • Anda Bayar: <span id="beliHarga" class="font-bold text-emerald-600"></span></p>
+    <div class="mb-3">
+      <label class="text-xs font-semibold text-gray-700 dark:text-gray-200 block mb-1">ID / Nomor Tujuan</label>
+      <input type="text" id="beliTujuan" placeholder="Masukkan User ID / Nomor HP" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500" />
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Saldo Anda: <span id="beliSaldoCek" class="font-bold text-emerald-600"></span></p>
+    <button onclick="prosesBeli()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow active:scale-95 transition">
+      <i class="fa-solid fa-bolt mr-2"></i>BAYAR SEKARANG
+    </button>
+  </div>
+</div>
+
+<!-- ============ MODAL: TOPUP SALDO ============ -->
+<div id="modalTopup" class="modal hidden fixed inset-0 z-[60] bg-black/50 flex items-end sm:items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="font-extrabold text-red-600 dark:text-white"><i class="fa-solid fa-wallet mr-1 text-emerald-500"></i>Isi Saldo</h3>
+      <button onclick="hideModal('modalTopup')" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="grid grid-cols-3 gap-2 mb-3">
+      <button onclick="setNominal(10000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp10.000</button>
+      <button onclick="setNominal(25000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp25.000</button>
+      <button onclick="setNominal(50000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp50.000</button>
+      <button onclick="setNominal(100000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp100.000</button>
+      <button onclick="setNominal(250000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp250.000</button>
+      <button onclick="setNominal(500000)" class="py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-semibold dark:text-white hover:bg-emerald-50 dark:hover:bg-emerald-900/30">Rp500.000</button>
+    </div>
+    <input type="number" id="nominalTopup" placeholder="Atau masukkan nominal..." class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none mb-3" />
+    <button onclick="prosesTopup()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold shadow active:scale-95 transition">
+      <i class="fa-solid fa-plus mr-2"></i>ISI SALDO
+    </button>
+  </div>
+</div>
+
+<!-- ============ MODAL: TARIK SALDO ============ -->
+<div id="modalTarik" class="modal hidden fixed inset-0 z-[60] bg-black/50 flex items-end sm:items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="font-extrabold text-red-600 dark:text-white"><i class="fa-solid fa-money-bill-transfer mr-1 text-emerald-500"></i>Penarikan Saldo</h3>
+      <button onclick="hideModal('modalTarik')" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Saldo tersedia: <span id="saldoTarikCek" class="font-bold text-emerald-600">Rp0</span></p>
+    <input type="number" id="nominalTarik" placeholder="Nominal penarikan (min 10.000)" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none mb-2" />
+    <input type="text" id="tujuanTarik" placeholder="Rekening / E-Wallet tujuan" class="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none mb-3" />
+    <button onclick="prosesTarik()" class="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold shadow active:scale-95 transition">
+      <i class="fa-solid fa-arrow-up-from-bracket mr-2"></i>AJUKAN PENARIKAN
+    </button>
+  </div>
+</div>
+
+<!-- ============ MODAL: UBAH PASSWORD ============ -->
+<div id="modalUbahPwd" class="modal hidden fixed inset-0 z-[60] bg-black/50 flex items-end sm:items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="font-extrabold text-red-600 dark:text-white">Ubah Kata Sandi</h3>
+      <button onclick="hideModal('modalUbahPwd')" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="formUbahPwd" class="space-y-3">
+      <div><label class="text-xs font-semibold block mb-1 text-gray-700 dark:text-gray-200">Password Lama</label>
+        <div class="relative"><input type="password" id="oldPwd" required class="w-full px-3 pr-10 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none" />
+        <button type="button" onclick="togglePwd('oldPwd', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><i class="fa-solid fa-eye-slash"></i></button></div>
+      </div>
+      <div><label class="text-xs font-semibold block mb-1 text-gray-700 dark:text-gray-200">Password Baru</label>
+        <div class="relative"><input type="password" id="newPwd" required class="w-full px-3 pr-10 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none" />
+        <button type="button" onclick="togglePwd('newPwd', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><i class="fa-solid fa-eye-slash"></i></button></div>
+      </div>
+      <div><label class="text-xs font-semibold block mb-1 text-gray-700 dark:text-gray-200">Ulangi Password Baru</label>
+        <div class="relative"><input type="password" id="newPwd2" required class="w-full px-3 pr-10 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white outline-none" />
+        <button type="button" onclick="togglePwd('newPwd2', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"><i class="fa-solid fa-eye-slash"></i></button></div>
+      </div>
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold">SIMPAN</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ MODAL: UPGRADE VIP ============ -->
+<div id="modalUpgradeVip" class="modal hidden fixed inset-0 z-[60] bg-black/50 flex items-end sm:items-center justify-center">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-5">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="font-extrabold text-red-600 dark:text-white"><i class="fa-solid fa-crown mr-1 text-yellow-500"></i>Upgrade VIP (1 Bulan)</h3>
+      <button onclick="hideModal('modalUpgradeVip')" class="text-gray-400 text-xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="space-y-2" id="vipOptions"></div>
+  </div>
+</div>
+
+<!-- ============ TOAST ============ -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] hidden px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-xl"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
