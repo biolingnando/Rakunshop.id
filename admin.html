@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RAKUN SHOP ID - Admin Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .tab-btn.active { background: #10b981; color: white; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+  .dark th, .dark td { border-color: #334155; }
+  th { background: #f1f5f9; font-weight: 700; color: #334155; position: sticky; top: 0; }
+  .dark th { background: #1e293b; color: #cbd5e1; }
+  .tbl-wrap { max-height: 480px; overflow: auto; border-radius: 10px; border: 1px solid #e2e8f0; }
+  .dark .tbl-wrap { border-color: #334155; }
+  .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-slate-100 transition-colors">
+
+<!-- PROTECT: redirect jika belum login admin -->
+<script>
+  if (!localStorage.getItem("rs_adminSession")) window.location.href = "index.html";
+</script>
+
+<!-- TOP BAR -->
+<header class="bg-white dark:bg-slate-800 shadow sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white">
+        <i class="fa-solid fa-user-shield"></i>
+      </div>
+      <div>
+        <h1 class="font-extrabold text-red-600 dark:text-white">ADMIN PANEL</h1>
+        <p class="text-[10px] text-gray-500 dark:text-gray-400">RAKUN SHOP ID • Database Manager</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="exportAll()" class="text-xs px-3 py-1.5 rounded-lg bg-blue-500 text-white font-semibold hover:bg-blue-600" title="Export semua data sebagai JSON">
+        <i class="fa-solid fa-download mr-1"></i>Export
+      </button>
+      <label class="text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold hover:bg-emerald-600 cursor-pointer">
+        <i class="fa-solid fa-upload mr-1"></i>Import
+        <input type="file" accept=".json" onchange="importAll(event)" class="hidden" />
+      </label>
+      <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+        <i id="admTheme" class="fa-solid fa-moon text-gray-700 dark:text-yellow-300"></i>
+      </button>
+      <button onclick="logoutAdmin()" class="text-xs px-3 py-1.5 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600">
+        <i class="fa-solid fa-right-from-bracket mr-1"></i>Keluar
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-5">
+
+  <!-- STATS -->
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
+      <p class="text-[10px] text-gray-500 dark:text-gray-400">Total Member</p>
+      <p class="text-xl font-extrabold text-emerald-600" id="statMember">0</p>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
+      <p class="text-[10px] text-gray-500 dark:text-gray-400">Total Produk</p>
+      <p class="text-xl font-extrabold text-blue-600" id="statProduk">0</p>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
+      <p class="text-[10px] text-gray-500 dark:text-gray-400">Total Transaksi</p>
+      <p class="text-xl font-extrabold text-orange-500" id="statTrx">0</p>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
+      <p class="text-[10px] text-gray-500 dark:text-gray-400">Total Saldo Tersimpan</p>
+      <p class="text-xl font-extrabold text-teal-600" id="statSaldo">0</p>
+    </div>
+    <div class="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
+      <p class="text-[10px] text-gray-500 dark:text-gray-400">Member VIP Aktif</p>
+      <p class="text-xl font-extrabold text-purple-600" id="statVip">0</p>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="bg-white dark:bg-slate-800 rounded-xl p-2 mb-4 flex flex-wrap gap-1 shadow-sm">
+    <button class="tab-btn active px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="members">
+      <i class="fa-solid fa-users mr-1"></i>Data Member
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="products">
+      <i class="fa-solid fa-box mr-1"></i>Data Produk
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="transactions">
+      <i class="fa-solid fa-receipt mr-1"></i>Data Transaksi
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="vip">
+      <i class="fa-solid fa-crown mr-1"></i>VIP Member
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="banners">
+      <i class="fa-solid fa-image mr-1"></i>Banner
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="settings">
+      <i class="fa-solid fa-gear mr-1"></i>Pengaturan
+    </button>
+    <button class="tab-btn px-4 py-2 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-300" data-tab="gsheets">
+      <i class="fa-brands fa-google mr-1"></i>Google Sheets
+    </button>
+  </div>
+
+  <!-- TAB: MEMBERS -->
+  <section id="tab-members" class="tab-panel bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="font-bold text-red-600 dark:text-white"><i class="fa-solid fa-users mr-1 text-emerald-500"></i>Data Member</h3>
+      <div class="flex gap-2">
+        <input id="cariMember" oninput="renderMembers()" placeholder="Cari nama/hp..." class="text-xs px-3 py-1.5 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 dark:text-white outline-none" />
+      </div>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th>Nama</th><th>HP</th><th>Email</th><th>Saldo</th><th>Poin</th><th>VIP</th><th>Expire VIP</th><th>Ref Code</th><th>Reffered By</th><th>Jumlah Ajak</th><th>Aksi</th>
+    </tr></thead><tbody id="tbodyMembers"></tbody></table></div>
+  </section>
+
+  <!-- TAB: PRODUCTS -->
+  <section id="tab-products" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+      <h3 class="font-bold text-red-600 dark:text-white"><i class="fa-solid fa-box mr-1 text-blue-500"></i>Data Produk</h3>
+      <button onclick="openProdukForm()" class="text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-white font-bold hover:bg-emerald-600">
+        <i class="fa-solid fa-plus mr-1"></i>Tambah Produk
+      </button>
+    </div>
+    <div id="produkForm" class="hidden mb-4 p-3 bg-gray-50 dark:bg-slate-700 rounded-xl text-xs space-y-2">
+      <input type="hidden" id="pId" />
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <input id="pNama" placeholder="Nama Produk" class="px-2 py-1.5 rounded border dark:bg-slate-800 dark:border-slate-600 outline-none" />
+        <select id="pKat" class="px-2 py-1.5 rounded border dark:bg-slate-800 dark:border-slate-600 outline-none">
+          <option>Game</option><option>Pulsa</option><option>Paket Data</option><option>Token Listrik</option><option>Voucher Game</option><option>Lainnya</option>
+        </select>
+        <input id="pSub" placeholder="Sub (MLBB/Telkomsel dll)" class="px-2 py-1.5 rounded border dark:bg-slate-800 dark:border-slate-600 outline-none" />
+        <input id="pHarga" type="number" placeholder="Harga Normal" class="px-2 py-1.5 rounded border dark:bg-slate-800 dark:border-slate-600 outline-none" />
+      </div>
+      <div class="flex gap-2">
+        <button onclick="simpanProduk()" class="px-4 py-1.5 rounded bg-emerald-500 text-white font-bold">Simpan</button>
+        <button onclick="document.getElementById('produkForm').classList.add('hidden')" class="px-4 py-1.5 rounded bg-gray-400 text-white font-bold">Batal</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th>ID</th><th>Nama Produk</th><th>Kategori</th><th>Sub</th><th>Harga Normal</th><th>VIP 1 (-12%)</th><th>VIP 2 (-40%)</th><th>VIP 3 (-70%)</th><th>Aksi</th>
+    </tr></thead><tbody id="tbodyProduk"></tbody></table></div>
+  </section>
+
+  <!-- TAB: TRANSACTIONS -->
+  <section id="tab-transactions" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+      <h3 class="font-bold text-red-600 dark:text-white"><i class="fa-solid fa-receipt mr-1 text-orange-500"></i>Data Transaksi</h3>
+      <div class="flex gap-2">
+        <select id="filterJenis" onchange="renderTrx()" class="text-xs px-2 py-1.5 rounded border dark:bg-slate-700 dark:border-slate-600 outline-none">
+          <option value="">Semua Jenis</option>
+          <option>pembelian</option><option>topup</option><option>penarikan</option><option>referal_bonus</option><option>upgrade_vip</option>
+        </select>
+        <select id="filterStatus" onchange="renderTrx()" class="text-xs px-2 py-1.5 rounded border dark:bg-slate-700 dark:border-slate-600 outline-none">
+          <option value="">Semua Status</option>
+          <option>Sukses</option><option>Menunggu</option><option>Gagal</option>
+        </select>
+        <button onclick="clearTrx()" class="text-xs px-3 py-1.5 rounded bg-red-500 text-white font-bold">Kosongkan</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th>Tanggal</th><th>Jenis</th><th>Member</th><th>HP</th><th>Detail</th><th>Nominal</th><th>Status</th><th>Aksi</th>
+    </tr></thead><tbody id="tbodyTrx"></tbody></table></div>
+  </section>
+
+  <!-- TAB: VIP -->
+  <section id="tab-vip" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <h3 class="font-bold text-red-600 dark:text-white mb-3"><i class="fa-solid fa-crown mr-1 text-purple-500"></i>Manajemen VIP Member</h3>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Masa aktif VIP otomatis 1 bulan. Jika lewat expire, member kembali ke BIASA.</p>
+    <div class="grid md:grid-cols-4 gap-3 mb-4">
+      <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-700"><p class="text-xs text-gray-500">BIASA</p><p class="font-extrabold">Diskon 0%</p></div>
+      <div class="p-3 rounded-xl bg-cyan-50 dark:bg-cyan-900/30 border border-cyan-300"><p class="text-xs text-cyan-700 dark:text-cyan-300 font-bold">VIP 1</p><p class="font-extrabold">Diskon 12%</p><p class="text-xs">Rp 25.000/bln</p></div>
+      <div class="p-3 rounded-xl bg-purple-50 dark:bg-purple-900/30 border border-purple-300"><p class="text-xs text-purple-700 dark:text-purple-300 font-bold">VIP 2</p><p class="font-extrabold">Diskon 40%</p><p class="text-xs">Rp 75.000/bln</p></div>
+      <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-900/30 border border-amber-300"><p class="text-xs text-amber-700 dark:text-amber-300 font-bold">VIP 3</p><p class="font-extrabold">Diskon 70%</p><p class="text-xs">Rp 150.000/bln</p></div>
+    </div>
+    <div class="tbl-wrap"><table><thead><tr>
+      <th>Member</th><th>HP</th><th>VIP Saat Ini</th><th>Expire</th><th>Ubah VIP</th><th>Perpanjang</th>
+    </tr></thead><tbody id="tbodyVip"></tbody></table></div>
+  </section>
+
+  <!-- TAB: BANNERS -->
+  <section id="tab-banners" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <h3 class="font-bold text-red-600 dark:text-white mb-3"><i class="fa-solid fa-image mr-1 text-pink-500"></i>Banner Slider (Auto ganti setiap 1 menit)</h3>
+    <div class="grid md:grid-cols-3 gap-3 mb-4" id="bannerList"></div>
+    <div class="flex gap-2">
+      <input id="newBannerUrl" placeholder="Masukkan URL gambar banner..." class="flex-1 text-xs px-3 py-2 rounded-lg border dark:bg-slate-700 dark:border-slate-600 outline-none" />
+      <button onclick="tambahBanner()" class="text-xs px-4 py-2 rounded-lg bg-emerald-500 text-white font-bold">+ Tambah</button>
+    </div>
+  </section>
+
+  <!-- TAB: SETTINGS -->
+  <section id="tab-settings" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <h3 class="font-bold text-red-600 dark:text-white mb-3"><i class="fa-solid fa-gear mr-1 text-slate-500"></i>Pengaturan Sistem</h3>
+    <div class="grid md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <label class="text-xs font-semibold block mb-1">Bonus Referal (per ajak teman)</label>
+        <input type="number" id="setRefBonus" class="w-full px-3 py-2 rounded-lg border dark:bg-slate-700 dark:border-slate-600 outline-none" />
+      </div>
+      <div>
+        <label class="text-xs font-semibold block mb-1">% Poin Didapat (dari harga normal)</label>
+        <input type="number" id="setPoinPct" class="w-full px-3 py-2 rounded-lg border dark:bg-slate-700 dark:border-slate-600 outline-none" />
+      </div>
+      <div>
+        <label class="text-xs font-semibold block mb-1">Nama Toko</label>
+        <input type="text" id="setNamaToko" value="RAKUN SHOP ID" class="w-full px-3 py-2 rounded-lg border dark:bg-slate-700 dark:border-slate-600 outline-none" />
+      </div>
+    </div>
+    <button onclick="simpanSettings()" class="mt-4 px-5 py-2 rounded-lg bg-emerald-500 text-white font-bold text-sm">Simpan Pengaturan</button>
+
+    <div class="mt-6 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+      <p class="text-xs font-bold text-red-600 dark:text-red-400 mb-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Zona Bahaya</p>
+      <button onclick="resetAll()" class="text-xs px-3 py-1.5 rounded bg-red-500 text-white font-bold">Reset SEMUA Data (Kembali ke Awal)</button>
+    </div>
+  </section>
+
+  <!-- TAB: GOOGLE SHEETS -->
+  <section id="tab-gsheets" class="tab-panel hidden bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm">
+    <h3 class="font-bold text-red-600 dark:text-white mb-3"><i class="fa-brands fa-google mr-1 text-green-500"></i>Integrasi Google Sheets</h3>
+    <div class="text-xs text-gray-600 dark:text-gray-300 space-y-2 mb-4 bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
+      <p><b>Langkah-langkah koneksi ke Google Sheets:</b></p>
+      <p>1. Buat Google Sheet baru dengan 5 Sheet: <code>Members</code>, <code>Products</code>, <code>Transactions</code>, <code>Banners</code>, <code>Settings</code></p>
+      <p>2. Buka <code>Extensions → Apps Script</code>, tempel kode dari file <code>gs.js</code> → Deploy → New deployment (Type: Web app, Execute as: Me, Who has access: Anyone)</p>
+      <p>3. Salin URL Deployment Apps Script ke kolom di bawah ini</p>
+      <p>4. Klik Hubungkan. Data akan otomatis sync 2 arah.</p>
+    </div>
+    <label class="text-xs font-semibold block mb-1">Apps Script Web App URL</label>
+    <input id="gsUrl" placeholder="https://script.google.com/macros/s/XXXX/exec" class="w-full text-xs px-3 py-2 rounded-lg border dark:bg-slate-700 dark:border-slate-600 outline-none mb-2" />
+    <div class="flex gap-2">
+      <button onclick="connectGS()" class="text-xs px-4 py-2 rounded-lg bg-green-500 text-white font-bold"><i class="fa-solid fa-link mr-1"></i>Hubungkan</button>
+      <button onclick="syncToGS()" class="text-xs px-4 py-2 rounded-lg bg-blue-500 text-white font-bold"><i class="fa-solid fa-cloud-arrow-up mr-1"></i>Kirim Data ke GS</button>
+      <button onclick="syncFromGS()" class="text-xs px-4 py-2 rounded-lg bg-purple-500 text-white font-bold"><i class="fa-solid fa-cloud-arrow-down mr-1"></i>Tarik Data dari GS</button>
+    </div>
+    <p id="gsStatus" class="mt-3 text-xs"></p>
+  </section>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[100] hidden px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-xl"></div>
+
+<script>
+/* ========= ADMIN LOGIC ========= */
+const DB = {
+  get(k, def) { try { const v = localStorage.getItem("rs_" + k); return v ? JSON.parse(v) : def; } catch { return def; } },
+  set(k, v) { localStorage.setItem("rs_" + k, JSON.stringify(v)); }
+};
+const VIP_TIERS = [
+  { level: 0, nama: "BIASA", diskon: 0 },
+  { level: 1, nama: "VIP 1", diskon: 0.12 },
+  { level: 2, nama: "VIP 2", diskon: 0.40 },
+  { level: 3, nama: "VIP 3", diskon: 0.70 }
+];
+function rp(n){return"Rp "+Number(n||0).toLocaleString("id-ID");}
+function toast(msg,type="success"){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] px-5 py-2.5 rounded-xl text-white text-sm font-semibold shadow-xl "+
+    (type==="success"?"bg-emerald-500":type==="error"?"bg-red-500":"bg-blue-500");
+  t.classList.remove("hidden");
+  clearTimeout(window.__tt);
+  window.__tt=setTimeout(()=>t.classList.add("hidden"),2500);
+}
+function toggleTheme(){
+  const cur=document.documentElement.classList.contains("dark")?"dark":"light";
+  const next=cur==="dark"?"light":"dark";
+  document.documentElement.classList.toggle("dark",next==="dark");
+  document.body.classList.toggle("dark",next==="dark");
+  document.getElementById("admTheme").className=next==="dark"?"fa-solid fa-sun text-yellow-300":"fa-solid fa-moon text-gray-700";
+  localStorage.setItem("rs_theme",next);
+}
+function logoutAdmin(){
+  localStorage.removeItem("rs_adminSession");
+  window.location.href="index.html";
+}
+
+/* TABS */
+document.querySelectorAll(".tab-btn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".tab-btn").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(x=>x.classList.add("hidden"));
+    b.classList.add("active");
+    document.getElementById("tab-"+b.dataset.tab).classList.remove("hidden");
+  });
+});
+
+/* STATS */
+function renderStats(){
+  const m=DB.get("members",[]), p=DB.get("products",[]), t=DB.get("transactions",[]);
+  document.getElementById("statMember").textContent=m.length;
+  document.getElementById("statProduk").textContent=p.length;
+  document.getElementById("statTrx").textContent=t.length;
+  document.getElementById("statSaldo").textContent=rp(m.reduce((s,x)=>s+Number(x.saldo||0),0));
+  document.getElementById("statVip").textContent=m.filter(x=>x.vipLevel>0 && (!x.vipExpire || new Date(x.vipExpire)>=new Date())).length;
+}
+
+/* MEMBERS */
+function renderMembers(){
+  const q=document.getElementById("cariMember").value.toLowerCase();
+  const arr=DB.get("members",[]).filter(m=>!q||m.nama.toLowerCase().includes(q)||m.hp.includes(q));
+  document.getElementById("tbodyMembers").innerHTML=arr.map(m=>{
+    const vip=VIP_TIERS.find(v=>v.level===m.vipLevel)||VIP_TIERS[0];
+    const exp=m.vipExpire?new Date(m.vipExpire).toLocaleDateString("id-ID"):"-";
+    return `<tr>
+      <td class="font-semibold">${m.nama}</td>
+      <td>${m.hp}</td>
+      <td class="text-gray-500">${m.email}</td>
+      <td class="font-bold text-emerald-600">${rp(m.saldo)}</td>
+      <td class="font-bold text-yellow-600">${m.poin||0}</td>
+      <td><span class="pill vip-${vip.level} text-white">${vip.nama}</span></td>
+      <td class="text-gray-500">${exp}</td>
+      <td class="font-mono text-xs">${m.refCode}</td>
+      <td class="text-gray-500">${m.refUsed||"-"}</td>
+      <td class="text-center">${m.refCount||0}</td>
+      <td>
+        <button onclick="editMember('${m.hp}')" class="text-blue-500 mr-1" title="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="hapusMember('${m.hp}')" class="text-red-500" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="11" class="text-center py-6 text-gray-400">Belum ada member</td></tr>`;
+}
+function editMember(hp){
+  const arr=DB.get("members",[]);
+  const m=arr.find(x=>x.hp===hp);
+  if(!m)return;
+  const tambah=prompt("Tambah/Kurangi saldo (gunakan minus untuk kurangi):\nSaldo saat ini: "+rp(m.saldo),0);
+  if(tambah===null)return;
+  const n=parseInt(tambah)||0;
+  m.saldo=Number(m.saldo||0)+n;
+  const tp=prompt("Tambah/Kurangi poin:\nPoin saat ini: "+(m.poin||0),0);
+  if(tp!==null) m.poin=Number(m.poin||0)+(parseInt(tp)||0);
+  const idx=arr.findIndex(x=>x.hp===hp);
+  arr[idx]=m; DB.set("members",arr);
+  const trx=DB.get("transactions",[]);
+  if(n!==0) trx.unshift({id:Date.now().toString(36),jenis:n>0?"topup":"penarikan",hp:m.hp,nama:m.nama,nominal:Math.abs(n),status:"Sukses",keterangan:"Admin "+(n>0?"tambah":"kurangi")+" saldo",tanggal:new Date().toISOString()});
+  DB.set("transactions",trx);
+  toast("Data member diupdate");
+  renderMembers(); renderStats();
+}
+function hapusMember(hp){
+  if(!confirm("Yakin hapus member ini?"))return;
+  DB.set("members",DB.get("members",[]).filter(x=>x.hp!==hp));
+  toast("Member dihapus");
+  renderMembers(); renderStats();
+}
+
+/* PRODUK */
+function renderProduk(){
+  const arr=DB.get("products",[]);
+  document.getElementById("tbodyProduk").innerHTML=arr.map(p=>`
+    <tr>
+      <td class="font-mono text-[10px]">${p.id}</td>
+      <td class="font-semibold">${p.nama}</td>
+      <td>${p.kategori}</td>
+      <td class="text-gray-500">${p.sub||"-"}</td>
+      <td class="font-bold">${rp(p.harga)}</td>
+      <td class="text-cyan-600 font-semibold">${rp(Math.round(p.harga*0.88))}</td>
+      <td class="text-purple-600 font-semibold">${rp(Math.round(p.harga*0.60))}</td>
+      <td class="text-amber-600 font-semibold">${rp(Math.round(p.harga*0.30))}</td>
+      <td>
+        <button onclick="editProduk('${p.id}')" class="text-blue-500 mr-1"><i class="fa-solid fa-pen"></i></button>
+        <button onclick="hapusProduk('${p.id}')" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+      </td>
+    </tr>`).join("") || `<tr><td colspan="9" class="text-center py-6 text-gray-400">Belum ada produk</td></tr>`;
+}
+function openProdukForm(p){
+  document.getElementById("produkForm").classList.remove("hidden");
+  document.getElementById("pId").value=p?p.id:"";
+  document.getElementById("pNama").value=p?p.nama:"";
+  document.getElementById("pKat").value=p?p.kategori:"Game";
+  document.getElementById("pSub").value=p?p.sub||"" :"";
+  document.getElementById("pHarga").value=p?p.harga:"";
+}
+function simpanProduk(){
+  const id=document.getElementById("pId").value;
+  const data={
+    id: id || "p"+Date.now().toString(36),
+    nama: document.getElementById("pNama").value.trim(),
+    kategori: document.getElementById("pKat").value,
+    sub: document.getElementById("pSub").value.trim(),
+    harga: parseInt(document.getElementById("pHarga").value)||0,
+    icon: "fa-box", warna: "from-gray-500 to-slate-600"
+  };
+  if(!data.nama||!data.harga)return toast("Lengkapi nama & harga","error");
+  const arr=DB.get("products",[]);
+  const idx=arr.findIndex(x=>x.id===data.id);
+  if(idx>=0){ data.icon=arr[idx].icon; data.warna=arr[idx].warna; arr[idx]=data; }
+  else arr.push(data);
+  DB.set("products",arr);
+  document.getElementById("produkForm").classList.add("hidden");
+  toast("Produk disimpan");
+  renderProduk(); renderStats();
+}
+function editProduk(id){
+  const p=DB.get("products",[]).find(x=>x.id===id);
+  if(p) openProdukForm(p);
+}
+function hapusProduk(id){
+  if(!confirm("Hapus produk ini?"))return;
+  DB.set("products",DB.get("products",[]).filter(x=>x.id!==id));
+  toast("Produk dihapus");
+  renderProduk(); renderStats();
+}
+
+/* TRANSAKSI */
+function renderTrx(){
+  const fj=document.getElementById("filterJenis").value;
+  const fs=document.getElementById("filterStatus").value;
+  let arr=DB.get("transactions",[]);
+  if(fj)arr=arr.filter(t=>t.jenis===fj);
+  if(fs)arr=arr.filter(t=>t.status===fs);
+  document.getElementById("tbodyTrx").innerHTML=arr.slice(0,300).map(t=>{
+    const tgl=new Date(t.tanggal).toLocaleString("id-ID");
+    const det=t.produk||t.keterangan||(t.tujuan?"→ "+t.tujuan:"");
+    const sc=t.status==="Sukses"?"bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300":
+             t.status==="Menunggu"?"bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300":
+             "bg-red-100 text-red-700";
+    return `<tr>
+      <td class="whitespace-nowrap">${tgl}</td>
+      <td class="font-semibold capitalize">${t.jenis.replace("_"," ")}</td>
+      <td>${t.nama||"-"}</td>
+      <td>${t.hp||"-"}</td>
+      <td class="max-w-[200px] truncate" title="${det}">${det}</td>
+      <td class="font-bold">${rp(t.hargaBayar||t.nominal)}</td>
+      <td><span class="pill ${sc}">${t.status}</span></td>
+      <td>
+        ${t.jenis==="penarikan" && t.status==="Menunggu"?`
+          <button onclick="accTrx('${t.id}')" class="text-emerald-500 mr-1" title="Terima"><i class="fa-solid fa-check"></i></button>
+          <button onclick="tolakTrx('${t.id}')" class="text-red-500" title="Tolak"><i class="fa-solid fa-xmark"></i></button>
+        `:`<span class="text-gray-300">-</span>`}
+      </td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="8" class="text-center py-6 text-gray-400">Tidak ada data</td></tr>`;
+}
+function accTrx(id){
+  const arr=DB.get("transactions",[]);
+  const t=arr.find(x=>x.id===id); if(!t)return;
+  t.status="Sukses"; DB.set("transactions",arr);
+  toast("Penarikan diterima"); renderTrx();
+}
+function tolakTrx(id){
+  const arr=DB.get("transactions",[]);
+  const t=arr.find(x=>x.id===id); if(!t)return;
+  t.status="Gagal";
+  // Kembalikan saldo
+  const mbr=DB.get("members",[]);
+  const m=mbr.find(x=>x.hp===t.hp);
+  if(m){ m.saldo=Number(m.saldo||0)+Number(t.nominal); const i=mbr.findIndex(x=>x.hp===t.hp); mbr[i]=m; DB.set("members",mbr); }
+  DB.set("transactions",arr);
+  toast("Penarikan ditolak, saldo dikembalikan"); renderTrx(); renderStats();
+}
+function clearTrx(){
+  if(!confirm("Yakin KOSONGKAN semua riwayat transaksi?"))return;
+  DB.set("transactions",[]); toast("Data transaksi dikosongkan"); renderTrx(); renderStats();
+}
+
+/* VIP */
+function renderVip(){
+  const arr=DB.get("members",[]);
+  document.getElementById("tbodyVip").innerHTML=arr.map(m=>{
+    const vip=VIP_TIERS.find(v=>v.level===m.vipLevel)||VIP_TIERS[0];
+    const exp=m.vipExpire?new Date(m.vipExpire).toLocaleDateString("id-ID"):"-";
+    return `<tr>
+      <td class="font-semibold">${m.nama}</td>
+      <td>${m.hp}</td>
+      <td><span class="pill vip-${vip.level} text-white">${vip.nama}</span></td>
+      <td>${exp}</td>
+      <td>
+        <select onchange="setVip('${m.hp}',this.value)" class="text-[11px] px-2 py-1 rounded border dark:bg-slate-700">
+          ${VIP_TIERS.map(v=>`<option value="${v.level}" ${v.level===m.vipLevel?"selected":""}>${v.nama}</option>`).join("")}
+        </select>
+      </td>
+      <td><button onclick="perpanjangVip('${m.hp}')" class="text-xs px-2 py-1 rounded bg-emerald-500 text-white font-bold">+1 Bulan</button></td>
+    </tr>`;
+  }).join("") || `<tr><td colspan="6" class="text-center py-6 text-gray-400">Belum ada member</td></tr>`;
+}
+function setVip(hp,lvl){
+  const arr=DB.get("members",[]);
+  const m=arr.find(x=>x.hp===hp); if(!m)return;
+  m.vipLevel=parseInt(lvl);
+  if(m.vipLevel>0){
+    const d=new Date(); d.setMonth(d.getMonth()+1); m.vipExpire=d.toISOString();
+  } else m.vipExpire=null;
+  const i=arr.findIndex(x=>x.hp===hp); arr[i]=m; DB.set("members",arr);
+  toast("VIP diupdate"); renderVip(); renderStats();
+}
+function perpanjangVip(hp){
+  const arr=DB.get("members",[]);
+  const m=arr.find(x=>x.hp===hp); if(!m)return;
+  if(m.vipLevel===0){ toast("Pilih level VIP terlebih dahulu","error"); return; }
+  const base=m.vipExpire?new Date(m.vipExpire):new Date();
+  base.setMonth(base.getMonth()+1);
+  m.vipExpire=base.toISOString();
+  const i=arr.findIndex(x=>x.hp===hp); arr[i]=m; DB.set("members",arr);
+  toast("VIP diperpanjang +1 bulan"); renderVip();
+}
+
+/* BANNERS */
+function renderBanners(){
+  const arr=DB.get("banners",[]);
+  document.getElementById("bannerList").innerHTML=arr.map((b,i)=>`
+    <div class="relative rounded-xl overflow-hidden border border-gray-200 dark:border-slate-600">
+      <img src="${b}" class="w-full h-32 object-cover" onerror="this.src='https://placehold.co/600x240/10b981/white?text=Banner+${i+1}'" />
+      <button onclick="hapusBanner(${i})" class="absolute top-1 right-1 w-7 h-7 rounded-full bg-red-500 text-white text-xs"><i class="fa-solid fa-trash"></i></button>
+      <p class="p-2 text-[10px] text-gray-500 truncate bg-white dark:bg-slate-700">${b}</p>
+    </div>`).join("") || `<p class="col-span-3 text-center text-gray-400 text-sm py-6">Belum ada banner</p>`;
+}
+function tambahBanner(){
+  const u=document.getElementById("newBannerUrl").value.trim();
+  if(!u)return toast("Masukkan URL","error");
+  const arr=DB.get("banners",[]); arr.push(u); DB.set("banners",arr);
+  document.getElementById("newBannerUrl").value="";
+  toast("Banner ditambahkan"); renderBanners();
+}
+function hapusBanner(i){
+  if(!confirm("Hapus banner ini?"))return;
+  const arr=DB.get("banners",[]); arr.splice(i,1); DB.set("banners",arr);
+  renderBanners();
+}
+
+/* SETTINGS */
+function loadSettings(){
+  const s=DB.get("settings",{refBonus:500,poinPercent:1});
+  document.getElementById("setRefBonus").value=s.refBonus||500;
+  document.getElementById("setPoinPct").value=s.poinPercent||1;
+}
+function simpanSettings(){
+  DB.set("settings",{
+    refBonus: parseInt(document.getElementById("setRefBonus").value)||500,
+    poinPercent: parseInt(document.getElementById("setPoinPct").value)||1,
+    namaToko: document.getElementById("setNamaToko").value
+  });
+  toast("Pengaturan disimpan");
+}
+function resetAll(){
+  if(!confirm("SEMUAA data akan dihapus & dikembalikan default. Yakin?"))return;
+  ["members","products","transactions","banners","settings","session","adminSession"].forEach(k=>localStorage.removeItem("rs_"+k));
+  toast("Data direset. Mengulang...");
+  setTimeout(()=>location.reload(),800);
+}
+
+/* EXPORT / IMPORT */
+function exportAll(){
+  const data={
+    members: DB.get("members",[]),
+    products: DB.get("products",[]),
+    transactions: DB.get("transactions",[]),
+    banners: DB.get("banners",[]),
+    settings: DB.get("settings",{}),
+    exportedAt: new Date().toISOString()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="rakun-shop-backup-"+Date.now()+".json";
+  a.click();
+  toast("Data di-export");
+}
+function importAll(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(d.members)DB.set("members",d.members);
+      if(d.products)DB.set("products",d.products);
+      if(d.transactions)DB.set("transactions",d.transactions);
+      if(d.banners)DB.set("banners",d.banners);
+      if(d.settings)DB.set("settings",d.settings);
+      toast("Import berhasil");
+      setTimeout(()=>location.reload(),500);
+    }catch(err){toast("File tidak valid","error");}
+  };
+  r.readAsText(f);
+}
+
+/* GOOGLE SHEETS (simple fetch-based sync) */
+function gsStatus(msg,ok=true){
+  const el=document.getElementById("gsStatus");
+  el.textContent=msg;
+  el.className="mt-3 text-xs "+(ok?"text-emerald-600":"text-red-500");
+}
+async function connectGS(){
+  const url=document.getElementById("gsUrl").value.trim();
+  if(!url)return gsStatus("Masukkan URL Apps Script terlebih dahulu",false);
+  try{
+    const r=await fetch(url+"?action=ping",{method:"GET"});
+    const t=await r.text();
+    gsStatus("Terhubung! Respon: "+t.substring(0,80));
+    localStorage.setItem("rs_gsUrl",url);
+  }catch(err){ gsStatus("Gagal terhubung: "+err.message,false); }
+}
+async function syncToGS(){
+  const url=localStorage.getItem("rs_gsUrl")||document.getElementById("gsUrl").value.trim();
+  if(!url)return gsStatus("Hubungkan Google Sheets terlebih dahulu",false);
+  const payload={
+    action:"syncIn",
+    members:DB.get("members",[]),
+    products:DB.get("products",[]),
+    transactions:DB.get("transactions",[]),
+    banners:DB.get("banners",[]),
+    settings:DB.get("settings",{})
+  };
+  try{
+    gsStatus("Mengirim data...");
+    const r=await fetch(url,{method:"POST",body:JSON.stringify(payload)});
+    gsStatus("Data terkirim ke Google Sheets: "+(await r.text()).substring(0,100));
+  }catch(err){ gsStatus("Gagal: "+err.message,false); }
+}
+async function syncFromGS(){
+  const url=localStorage.getItem("rs_gsUrl")||document.getElementById("gsUrl").value.trim();
+  if(!url)return gsStatus("Hubungkan Google Sheets terlebih dahulu",false);
+  try{
+    gsStatus("Menarik data...");
+    const r=await fetch(url+"?action=getAll");
+    const d=await r.json();
+    if(d.members)DB.set("members",d.members);
+    if(d.products)DB.set("products",d.products);
+    if(d.transactions)DB.set("transactions",d.transactions);
+    if(d.banners)DB.set("banners",d.banners);
+    if(d.settings)DB.set("settings",d.settings);
+    gsStatus("Data ditarik! Memuat ulang...");
+    setTimeout(()=>location.reload(),800);
+  }catch(err){ gsStatus("Gagal tarik data: "+err.message,false); }
+}
+
+/* BOOT */
+(function(){
+  const t=localStorage.getItem("rs_theme")||"light";
+  document.documentElement.classList.toggle("dark",t==="dark");
+  document.body.classList.toggle("dark",t==="dark");
+  document.getElementById("admTheme").className=t==="dark"?"fa-solid fa-sun text-yellow-300":"fa-solid fa-moon text-gray-700";
+  const gsurl=localStorage.getItem("rs_gsUrl"); if(gsurl)document.getElementById("gsUrl").value=gsurl;
+  renderStats();
+  renderMembers();
+  renderProduk();
+  renderTrx();
+  renderVip();
+  renderBanners();
+  loadSettings();
+})();
+</script>
+</body>
+</html>
